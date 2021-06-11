@@ -3,7 +3,8 @@
 # return dataframe of all the issues for that newspaper
 get_issues = function(lccn) {
     construct_lccn_url = function(lccn="") {
-	url = paste0("https://chroniclingamerica.loc.gov/lccn/", lccn, ".json", collapse="")
+	url = paste0("https://chroniclingamerica.loc.gov/lccn/", 
+		     lccn, ".json", collapse="")
     }
     url = construct_lccn_url(lccn)
 
@@ -25,7 +26,8 @@ get_issues = function(lccn) {
 }
 
 get_newspapers = function() {
-    newspapers = jsonlite::fromJSON("https://chroniclingamerica.loc.gov/newspapers.json")$newspapers
+    newspapers = jsonlite::fromJSON(
+	    "https://chroniclingamerica.loc.gov/newspapers.json")$newspapers
 }
 
 check_fail = function(x) {
