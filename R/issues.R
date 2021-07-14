@@ -24,27 +24,35 @@ get_issues = function(lccn) {
 	      }
     )
 
-    # place and subject can have multiple values -> collapse to one
-    parsed_json$place = paste0(parsed_json$place, collapse=",")
-    parsed_json$subject = paste0(parsed_json$subject, collapse=",")
-
     # handle NULL before creating dataframe
     parsed_json = lapply(parsed_json, function(x) if (is.null(x)) NA else x)
 
     # create dataframe from list
-    tibble::as_tibble(parsed_json)
+    tibble::tibble(
+		      place_of_publication = parsed_json$place_of_publication,
+		      lccn = parsed_json$lccn,
+		      start_year = parsed_json$start_year,
+		      name = parsed_json$name,
+		      publisher = parsed_json$publisher,
+		      end_year = parsed_json$end_year,
+		      url = parsed_json$issues$url,
+		      date= parsed_json$issues$date_issued,
+		      subject = list(parsed_json$subject), # can be multiple
+		      place = list(parsed_json$place), # can be multiple
+		      )
 }
 
 get_newspapers = function() {
     newspapers = jsonlite::fromJSON(
 	    "https://chroniclingamerica.loc.gov/newspapers.json")$newspapers
+    tibble::as_tibble(newspapers)
 }
 
 check_fail = function(x) {
     "error.message" %in% names(x)
 }
 
-# this takes about 30 minutes to run
+# this takes about 30 minutes to run on one core
 # by default should just load the package data
 get_issues_all = function(sample=-1, ncores=detectCores()) {
 
@@ -54,7 +62,7 @@ get_issues_all = function(sample=-1, ncores=detectCores()) {
 	lccns = sample(lccns, sample)
     }
 
-    issues_dfs = mclapply(lccns, get_issues, mc.cores=ncores)
+    issues_dfs = parallel::mclapply(lccns, get_issues, mc.cores=ncores)
     failed_list = Filter(check_fail, issues_dfs) # 19 should be there
     success_list = Filter(Negate(check_fail), issues_dfs)
 
