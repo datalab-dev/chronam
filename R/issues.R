@@ -8,21 +8,31 @@ get_issues = function(lccn) {
     }
     url = construct_lccn_url(lccn)
 
+    # in case the url can't be parsed by fromJSON for some reason
+    # e.g url doesn't exist
     tryCatch (
 	      {
-		  out = jsonlite::fromJSON(url)
-		  out$place = paste0(out$place, collapse=",")
-		  out$subject = paste0(out$subject, collapse=",")
-
-		  out = as.data.frame(out)
+		  parsed_json = jsonlite::fromJSON(url)
 	      },
 	      error = function(cond) {
-		  out = data.frame(
+		  return(
+			 data.frame(
 				   "lccn" = lccn,
 				   "url" = url,
 				   "error-message" = cond$message)
+			 )
 	      }
     )
+
+    # place and subject can have multiple values -> collapse to one
+    parsed_json$place = paste0(parsed_json$place, collapse=",")
+    parsed_json$subject = paste0(parsed_json$subject, collapse=",")
+
+    # handle NULL before creating dataframe
+    parsed_json = lapply(parsed_json, function(x) if (is.null(x)) NA else x)
+
+    # create dataframe from list
+    tibble::as_tibble(parsed_json)
 }
 
 get_newspapers = function() {
@@ -34,7 +44,9 @@ check_fail = function(x) {
     "error.message" %in% names(x)
 }
 
-get_issues_all = function(sample=-1) {
+# this takes about 30 minutes to run
+# by default should just load the package data
+get_issues_all = function(sample=-1, ncores=detectCores()) {
 
     lccns = get_newspapers()$lccn
 
@@ -42,7 +54,7 @@ get_issues_all = function(sample=-1) {
 	lccns = sample(lccns, sample)
     }
 
-    issues_dfs = lapply(lccns, get_issues)
+    issues_dfs = mclapply(lccns, get_issues, mc.cores=ncores)
     failed_list = Filter(check_fail, issues_dfs) # 19 should be there
     success_list = Filter(Negate(check_fail), issues_dfs)
 
