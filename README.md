@@ -1,4 +1,14 @@
-Features:
+# Chronam
+
+# Install
+
+From package directory:
+
+```{r}
+devtools::install()
+```
+
+# Features
 
 Metadata dataframe of all newspapers
 Metadata dataframe of all issues with:
@@ -12,3 +22,8 @@ Search using Advanced Search page
 Download batch
 Download ocr
 
+# Development Workflow
+
+# Limitations
+
+# Contact
