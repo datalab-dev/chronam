@@ -33,7 +33,7 @@ subset_info = function(start, end,
 		  "newspapers_per_state" = table(results_unnested$state),
 		  "newspapers_per_state_unnested" = table(results_unnested$state),
 		  "issues_per_state" = 
-		  aggregate(num_issues ~ state, data=results_unnested, sum),
+		  aggregate(num_issues ~ state, data=results, sum),
 		  "issues_per_state_unnested" = 
 		  aggregate(num_issues ~ state, data=results_unnested, sum))
     )
