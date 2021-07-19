@@ -6,7 +6,7 @@
 #' @return tibble of metadata for each issue of that newspaper that has issues\
 #' within the start and end date
 #' @export
-issues_in_range = function(start, end, 
+subset_info = function(start, end, 
 	    issues=chronam::issues, newspapers=chronam::newspapers) {
 
 
