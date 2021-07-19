@@ -4,7 +4,7 @@
 \alias{get_issues_all}
 \title{Get a dataframe of all the issues and their metadata}
 \usage{
-get_issues_all(sample = -1, ncores = detectCores(), update = FALSE)
+get_issues_all(sample = -1, ncores = parallel::detectCores(), update = FALSE)
 }
 \arguments{
 \item{sample}{optional int refering to sample size, by default gets all}
