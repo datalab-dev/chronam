@@ -91,7 +91,8 @@ get_state = function(place) {
 #' @param update optional bool if FALSE just use the package data
 #' @return dataframe of all the issues and their metadata
 #' @export
-get_issues_all = function(sample=-1, ncores=detectCores(), update=FALSE) {
+get_issues_all = function(sample=-1, ncores=parallel::detectCores(), 
+			  update=FALSE) {
 
     if (!update) {
 	return(chronam::issues)
