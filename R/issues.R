@@ -45,19 +45,6 @@ get_issues = function(lccn) {
 		      )
 }
 
-#' Get full list of newspapers metadata from Chronicling America Website
-#'
-#' 
-#' @return tibble of all the newspapers
-#' @importFrom jsonlite fromJSON
-#' @importFrom tibble as_tibble
-#' @export
-get_newspapers = function() {
-    newspapers = jsonlite::fromJSON(
-	    "https://chroniclingamerica.loc.gov/newspapers.json")$newspapers
-    tibble::as_tibble(newspapers)
-}
-
 #' Determine if problem occured during downloading of an issue
 #'
 #' @param x dataframe return of chronam::get_issues
@@ -109,7 +96,11 @@ get_issues_all = function(sample=-1, ncores=parallel::detectCores(),
     success_list = Filter(Negate(check_fail), issues_dfs)
 
     issues_all = do.call("rbind", success_list)
+
+    # add state and year columns
     issues_all$state = sapply(issues_all$place, get_state)
+    issues_all$year = as.numeric(
+		    format(as.Date(issues_all$date, format="%Y-%m-%d"), "%Y"))
     issues_all
 }
 
