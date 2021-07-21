@@ -68,19 +68,6 @@ get_state = function(place) {
     state = strsplit(place, "--")[[1]][1]
 }
 
-#' Get Batch for each issue
-#'
-#' @param issue_url character url for issue metadata
-#' @return character of batch name
-get_batch_from_issue = function(issue_url) {
-    # return the batch name that has a given issue
-    # apparently can't go from batch -> newspapers -> issues
-    # as sometimes a newspaper is in multiple batches
-    # verify this ^
-    batch = jsonlite::fromJSON(issue_url)$batch$name
-}
-
-
 #' Get a dataframe of all the issues and their metadata
 #'
 #' this takes about 30 minutes to run on one core
