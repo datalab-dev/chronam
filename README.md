@@ -10,20 +10,20 @@ devtools::install()
 
 # Features
 
-Metadata dataframe of all newspapers
-Metadata dataframe of all issues with:
-- Normalized place of publication
-- Batch name for issue (to get ocr.xml, pdf, etc)
-
-Subsetting + Sampling functions (on newspapers list, issues list)
-
-Search using Advanced Search page
-
-Download batch
-Download ocr
+- Metadata dataframe of all batches (done)
+- Metadata dataframe of all newspapers (done)
+- Metadata dataframe of all issues with (done):
+     + additional column for state (of publication) and year
+- Subsetting function based on years (done) 
+- Subsetting function based on state (TBD) 
+- Search using Advanced Search page (TBD)
+- Download batch (TBD)
+- Load downloaded batch (TBD)
 
 # Development Workflow
 
 # Limitations
+
+# Useful Links and other packages
 
 # Contact
