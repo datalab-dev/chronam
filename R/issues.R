@@ -31,7 +31,7 @@ get_issues = function(lccn) {
     parsed_json = lapply(parsed_json, function(x) if (is.null(x)) NA else x)
 
     # create dataframe from list
-    tibble::tibble(
+    issues = tibble::tibble(
 		      place_of_publication = parsed_json$place_of_publication,
 		      lccn = parsed_json$lccn,
 		      start_year = parsed_json$start_year,
@@ -43,6 +43,10 @@ get_issues = function(lccn) {
 		      subject = list(parsed_json$subject), # can be multiple
 		      place = list(parsed_json$place), # can be multiple
 		      )
+    issues$year = as.numeric(
+		    format(as.Date(issues$date, format="%Y-%m-%d"), "%Y"))
+    issues$state = sapply(issues$place, get_state)
+    issues
 }
 
 #' Determine if problem occured during downloading of an issue
@@ -59,10 +63,21 @@ check_fail = function(x) {
 #' @param place character of locations associated with the newspapers 
 #' @return character the state name for the last place in the list
 get_state = function(place) {
-    # takes whole column (called after issues have been compiled)
-    # as postprocessing
+    place = unlist(place)
     place = tail(place, 1)
     state = strsplit(place, "--")[[1]][1]
+}
+
+#' Get Batch for each issue
+#'
+#' @param issue_url character url for issue metadata
+#' @return character of batch name
+get_batch_from_issue = function(issue_url) {
+    # return the batch name that has a given issue
+    # apparently can't go from batch -> newspapers -> issues
+    # as sometimes a newspaper is in multiple batches
+    # verify this ^
+    batch = jsonlite::fromJSON(issue_url)$batch$name
 }
 
 
@@ -96,15 +111,11 @@ get_issues_all = function(sample=-1, ncores=parallel::detectCores(),
     success_list = Filter(Negate(check_fail), issues_dfs)
 
     issues_all = do.call("rbind", success_list)
-
-    # add state and year columns
-    issues_all$state = sapply(issues_all$place, get_state)
-    issues_all$year = as.numeric(
-		    format(as.Date(issues_all$date, format="%Y-%m-%d"), "%Y"))
     issues_all
 }
 
 #parse_place_of_publication_string(x) {
 # convert place of pub into a state or territory name
 # TODO:
+# adapt code from https://github.com/datalab-dev/stephanie_mudge_strategy/blob/main/chronicling_america_scraping/create_issues_df_states.R
 #}
