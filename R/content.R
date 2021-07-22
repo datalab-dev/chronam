@@ -17,12 +17,49 @@
 #' @return character of batch name
 get_batch_from_issue = function(issue_url) {
     batch = jsonlite::fromJSON(issue_url)$batch$name
+
+    # alternativley get list of lccns => search on batchesdf => list of batches
 }
 
-download_batch = function(){
-    TODO:
+#' Download the batch from chronicling America
+#' 
+#' bulk data url: http://chroniclingamerica.loc.gov/data/batches/<batch_name>
+#' bulk ocr data url: http://chroniclingamerica.loc.gov/data/ocr/<batch_name>.tar.bz2
+#' 
+#' batch info url: http://chroniclingamerica.loc.gov/batches/<batch_name>.json
+#' bulk bib data url: http://chroniclingamerica.loc.gov/data/bib/<??>
+#' bulk word_coordinates data url: http://chroniclingamerica.loc.gov/data/word_coordinates/<lccn>
+#'
+#' the ocr data url seems be missing batches ingested in the current month
+#' @param batch_name character name of batch e.g wvu_els_ver01
+#' @param type character optional name of type of data you want to download for the\
+#' batch, one of c("data", "ocr")
+#' @param odir optional character path of directory to download the files into
+#' @importFrom Rcurl getUrl
+#' @importFrom jsonlite fromJSON
+download_batch = function(batch_name, type= "ocr", odir=".") {
+    # TODO: change this to use httr, only support the ocr version?
+    if (type="data") {
+        url = paste0("https://chroniclingamerica.loc.gov/data/batches/", 
+		 batch_name)
+    }
+    if (type=="ocr") {
+        url = paste0("https://chroniclingamerica.loc.gov/data/ocr/", 
+		 batch_name, ".tar.bz2")
+
+
+       # download into odir
+        content = RCurl::getURL(url)
+	if 404:
+	    redo but get the data
+    }
 }
 
-parse_batch = function() {
+#' Load the text for a locally downloaded batch
+#'
+#' @param path character file path to a directory containing a batche's data
+#' @return dataframe of text_block, page, issue, date, year, month, day, lccn
+parse_batch = function(path) {
     TODO:
+    # Going to need to merge with the issues_df metadata at some point
 }
