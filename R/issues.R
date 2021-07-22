@@ -71,22 +71,13 @@ get_state = function(place) {
 #' Get a dataframe of all the issues and their metadata
 #'
 #' this takes about 30 minutes to run on one core
-#' so by default we just load the package data
-#' if you suspect package data is out of date then
-#' can be run with update=TRUE param
+#' Use package data when possible
 #' 
 #' @param sample optional int refering to sample size, by default gets all
 #' @param ncores optional int number of cores to use for pinging chronam site
-#' @param update optional bool if FALSE just use the package data
 #' @return dataframe of all the issues and their metadata
 #' @export
-get_issues_all = function(sample=-1, ncores=parallel::detectCores(), 
-			  update=FALSE) {
-
-    if (!update) {
-	return(chronam::issues)
-    }
-
+get_issues_all = function(sample=-1, ncores=parallel::detectCores(), ) {
     lccns = get_newspapers()$lccn
 
     if (sample >= 1) {

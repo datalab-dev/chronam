@@ -65,7 +65,7 @@ chronam::issues
 It can take upwards of 30 minutes to download the full set from the site.
 Regenerate the issues data:
 ```{r get_issues_all, eval=FALSE}
-issues = chronam::get_issues_all(update=TRUE) #if update=FALSE will just use the package data
+issues = chronam::get_issues_all()
 ```
 
 To get the issues for a specific lccn
