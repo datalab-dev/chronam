@@ -17,7 +17,7 @@ devtools::install()
 - Subsetting function based on years (done) 
 - Subsetting function based on state (TBD) 
 - Search using Advanced Search page (TBD)
-- Download batch (TBD)
+- Download batch (done)
 - Load downloaded batch (TBD)
 
 # Development Workflow
