@@ -77,7 +77,7 @@ get_state = function(place) {
 #' @param ncores optional int number of cores to use for pinging chronam site
 #' @return dataframe of all the issues and their metadata
 #' @export
-get_issues_all = function(sample=-1, ncores=parallel::detectCores(), ) {
+get_issues_all = function(sample=-1, ncores=parallel::detectCores()) {
     lccns = get_newspapers()$lccn
 
     if (sample >= 1) {
