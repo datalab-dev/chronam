@@ -2,7 +2,7 @@
 library(chronam)
 library(usethis)
 
-issues = chronam::get_issues_all(update=TRUE)
+issues = chronam::get_issues_all()
 
 saveRDS(issues, "issues.rds")
 usethis::use_data(issues, overwrite=TRUE)
