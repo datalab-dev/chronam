@@ -57,3 +57,10 @@ parse_batch_ocr_tar = function(path_to_tar) {
 
     # extract
 }
+
+#' Get text for a single issue through the website (not bulk download)
+#'
+#' @param lccn
+#' @param date
+#' @return string (maybe text blocks if possible)
+# TODO:
