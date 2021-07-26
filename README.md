@@ -15,10 +15,10 @@ devtools::install()
 - Metadata dataframe of all issues with (done):
      + additional column for state (of publication) and year
 - Subsetting function based on years (done) 
-- Subsetting function based on state (TBD) 
 - Search using Advanced Search page (TBD)
 - Download batch (done)
-- Load downloaded batch (TBD)
+- Load downloaded batch (done)
+- get content for a single issue not bulk download (TBD)
 
 # Development Workflow
 
