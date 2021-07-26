@@ -47,6 +47,7 @@ download_batch_ocr_tar = function(batch_name, odir=".") {
 #' @param path_to_tar character file path to tar file for a batch
 #' @param exdir character file path extract contents to
 #' @return dataframe of text_block, page, issue, date, year, month, day, lccn
+#' @export
 parse_batch_ocr_tar = function(path_to_tar, exdir=".") {
     #TODO:
     # eventually need to be able to handle already extracted tar files...
@@ -67,14 +68,25 @@ parse_batch_ocr_tar = function(path_to_tar, exdir=".") {
     issues_content = do.call("rbind", issues_content_list)
 }
 
-    get_block_content = function(block) {
-	block_text = ""
-	strings = xml2::xml_find_all(block, ".//String")
-	contents = xml2::xml_attr(attr="CONTENT", strings)
-	contents = trimws(contents)
-	content = paste(contents, collapse=" ")
-    }
+#' Aggregate all the strings in a text block 
+#' @param xmlnode for a TextBlock from ocr.xml file
+#' @return string containing all the words in the text block
+#' @importFrom xml2 xml_find_all xml_attr
+get_block_content = function(block) {
+    block_text = ""
+    strings = xml2::xml_find_all(block, ".//String")
+    contents = xml2::xml_attr(attr="CONTENT", strings)
+    contents = trimws(contents)
+    content = paste(contents, collapse=" ")
+}
 
+#' Parse the xml from an ocr.xml file 
+#'
+#' @param xml character filepath or xml content of an ocr.xml file
+#' @return tibble where each row is a text block
+#' @export
+#' @importFrom xml2 read_xml xml_ns_strip xml_find_all
+#' @importFrom tibble tibble
 parse_ocr_xml = function(xml) {
 
     doc = xml2::read_xml(xml)
