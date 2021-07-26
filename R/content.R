@@ -44,19 +44,57 @@ download_batch_ocr_tar = function(batch_name, odir=".") {
 
 #' Load the text for a locally downloaded batch
 #'
-#' @param path character file path to tar file for a batch
+#' @param path_to_tar character file path to tar file for a batch
+#' @param exdir character file path extract contents to
 #' @return dataframe of text_block, page, issue, date, year, month, day, lccn
-parse_batch_ocr_tar = function(path_to_tar) {
-    # eventually need to be able to handle already extracted tar files...
-    # for now extract to /tmp/ ...
+parse_batch_ocr_tar = function(path_to_tar, exdir=".") {
     #TODO:
+    # eventually need to be able to handle already extracted tar files...
     # Going to need to merge with the issues_df metadata at some point
 
     # get file list
     files = untar(path_to_tar, list=TRUE)
+    xml_files = files[grep("\\.xml$", files)]
+    txt_files = files[grep("\\.txt$", files)]
 
-    # extract
+    # extract xml
+    untar(path_to_tar, xml_files, exdir=exdir)
+
+    # parse xml
+    issues_content_list = lapply(xml_files[1:5], parse_ocr_xml)
+
+    # combine
+    issues_content = do.call("rbind", issues_content_list)
 }
+
+    get_block_content = function(block) {
+	block_text = ""
+	strings = xml2::xml_find_all(block, ".//String")
+	contents = xml2::xml_attr(attr="CONTENT", strings)
+	contents = trimws(contents)
+	content = paste(contents, collapse=" ")
+    }
+
+parse_ocr_xml = function(xml) {
+
+    doc = xml2::read_xml(xml)
+    doc = xml2::xml_ns_strip(doc)
+    blocks = xml2::xml_find_all(doc, "//TextBlock")
+
+    block_content = as.character(lapply(blocks, get_block_content))
+    fields = strsplit(file, "/")[[1]]
+    issue = tibble::tibble (
+			    lccn = fields[1],
+			    year = fields[2],
+			    month = fields[3],
+			    day = fields[4],
+			    id = paste(lccn, year, month, day, sep="_"),
+			    ed = fields[5],
+			    page = fields[6],
+			    num_blocks = length(block_content),
+			    content = block_content)
+}
+
 
 #' Get text for a single issue through the website (not bulk download)
 #'
