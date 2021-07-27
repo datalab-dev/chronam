@@ -15,6 +15,8 @@
 #' 
 #' @param issue_url character url for issue metadata
 #' @return character of batch name
+#' @importFrom jsonlite fromJSON
+#' @export
 get_batch_from_issue = function(issue_url) {
     batch = jsonlite::fromJSON(issue_url)$batch$name
 
