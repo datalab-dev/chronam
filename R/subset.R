@@ -1,23 +1,14 @@
-#' Return metadata about newpapers issues from within range
+#' Return metadata about newpapers issues
 #'
-#' @param start number for inclusive start date
-#' @param end number for inclusive end date 
-#' @param issues optional dataframe of metadata
+#' @param issues dataframe of issues to summarize information for
+#' @param newspapers optional dataframe of newspaper metadata
 #' @return tibble of metadata for each issue of that newspaper that has issues\
 #' within the start and end date
 #' @export
-subset_info = function(start, end, 
-	    issues=chronam::issues, newspapers=chronam::newspapers) {
+subset_info = function(issues, newspapers=chronam::newspapers) {
 
-
-    # 1. subset on range
-    sub = issues[issues$year >= start & issues$year <= end, ] 
-
-    if (nrow(sub) == 0) {
-	return()
-    }
     # 2. aggregate on lccn
-    counts = data.frame(table(sub$lccn))
+    counts = data.frame(table(issues$lccn))
     colnames(counts) = c("lccn", "num_issues")
 
     # 3. join on newspapers.lccn
