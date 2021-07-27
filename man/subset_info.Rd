@@ -2,26 +2,19 @@
 % Please edit documentation in R/subset.R
 \name{subset_info}
 \alias{subset_info}
-\title{Return metadata about newpapers issues from within range}
+\title{Return metadata about newpapers issues}
 \usage{
-subset_info(
-  start,
-  end,
-  issues = chronam::issues,
-  newspapers = chronam::newspapers
-)
+subset_info(issues, newspapers = chronam::newspapers)
 }
 \arguments{
-\item{start}{number for inclusive start date}
+\item{issues}{dataframe of issues to summarize information for}
 
-\item{end}{number for inclusive end date}
-
-\item{issues}{optional dataframe of metadata}
+\item{newspapers}{optional dataframe of newspaper metadata}
 }
 \value{
 tibble of metadata for each issue of that newspaper that has issues\
 within the start and end date
 }
 \description{
-Return metadata about newpapers issues from within range
+Return metadata about newpapers issues
 }
