@@ -21,11 +21,11 @@ subset_info = function(issues, newspapers=chronam::newspapers) {
 		  "newspapers" = results,
 		  "newspaper_count" = length(results$lccn),
 		  "issues_count" = sum(results$num_issues),
-		  "newspapers_per_state" = table(results_unnested$state),
-		  "newspapers_per_state_unnested" = table(results_unnested$state),
+		  "newspapers_per_state" = table(results$state),
+		  "newspapers_per_state_unnested" = table(results_unnested$states),
 		  "issues_per_state" = 
 		  aggregate(num_issues ~ state, data=results, sum),
 		  "issues_per_state_unnested" = 
-		  aggregate(num_issues ~ state, data=results_unnested, sum))
+		  aggregate(num_issues ~ states, data=results_unnested, sum))
     )
 }
