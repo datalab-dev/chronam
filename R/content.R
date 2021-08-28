@@ -44,17 +44,12 @@ download_batch_ocr_tar = function(batch_name, odir=".") {
     httr::GET(url, httr::write_disk(paste0(odir, "/", fname), overwrite=TRUE))
 }
 
-#' Load the text for a locally downloaded batch
+#' Extract ocr xml files from tar file
 #'
 #' @param path_to_tar character file path to tar file for a batch
 #' @param exdir character file path extract contents to
-#' @return dataframe of text_block, page, issue, date, year, month, day, lccn
 #' @export
-parse_batch_ocr_tar = function(path_to_tar, exdir=".") {
-    #TODO:
-    # eventually need to be able to handle already extracted tar files...
-    # Going to need to merge with the issues_df metadata at some point
-
+exract_xml_files = function(path_to_tar, exdir=".") {
     # get file list
     files = untar(path_to_tar, list=TRUE)
     xml_files = files[grep("\\.xml$", files)]
@@ -62,12 +57,28 @@ parse_batch_ocr_tar = function(path_to_tar, exdir=".") {
 
     # extract xml
     untar(path_to_tar, xml_files, exdir=exdir)
+}
 
-    # parse xml
-    issues_content_list = lapply(xml_files[1:5], parse_ocr_xml)
-
-    # combine
+#' Parse directory of xml files into dataframe
+#'
+#' @param path to a directory of xml files
+#' @return dataframe of text_block, page, issue, date, year, month, day, lccn
+#' @export
+parse_xml_files = function(path) {
+    xml_files = list.files(path, full.names=TRUE, pattern=".xml", recursive=TRUE)
+    issues_content_list =lapply(xml_files, parse_ocr_xml)
     issues_content = do.call("rbind", issues_content_list)
+}
+
+#' Load the text for a locally downloaded batch
+#'
+#' @param path_to_tar character file path to tar file for a batch
+#' @param exdir character file path extract contents to
+#' @return dataframe of text_block, page, issue, date, year, month, day, lccn
+#' @export
+parse_batch_ocr_tar = function(path_to_tar, exdir=".") {
+    extract_xml_files(path_to_tar, exdir)
+    content = parse_xml_files(exdir)
 }
 
 #' Aggregate all the strings in a text block 
@@ -96,7 +107,7 @@ parse_ocr_xml = function(xml) {
     blocks = xml2::xml_find_all(doc, "//TextBlock")
 
     block_content = as.character(lapply(blocks, get_block_content))
-    fields = strsplit(file, "/")[[1]]
+    fields = strsplit(xml, "/")[[1]]
     issue = tibble::tibble (
 			    lccn = fields[1],
 			    year = fields[2],
