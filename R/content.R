@@ -37,6 +37,7 @@ get_batch_from_issue = function(issue_url) {
 #' @param odir optional character path of directory to download the files into
 #' @importFrom httr GET write_disk
 #' @importFrom jsonlite fromJSON
+#' @export
 download_batch_ocr_tar = function(batch_name, odir=".") {
     fname = paste0(batch_name, ".tar.bz2")
     url = paste0("https://chroniclingamerica.loc.gov/data/ocr/", fname)
