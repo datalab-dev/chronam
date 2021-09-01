@@ -4,7 +4,7 @@
 \alias{parse_ocr_xml}
 \title{Parse the xml from an ocr.xml file}
 \usage{
-parse_ocr_xml(xml)
+parse_ocr_xml(xml, root = "")
 }
 \arguments{
 \item{xml}{character filepath or xml content of an ocr.xml file}

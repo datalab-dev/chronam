@@ -99,16 +99,22 @@ get_block_content = function(block) {
 #' @param xml character filepath or xml content of an ocr.xml file
 #' @return tibble where each row is a text block
 #' @export
+#' @importFrom stringr str_replace
 #' @importFrom xml2 read_xml xml_ns_strip xml_find_all
 #' @importFrom tibble tibble
-parse_ocr_xml = function(xml) {
+parse_ocr_xml = function(xml, root="") {
 
     doc = xml2::read_xml(xml)
     doc = xml2::xml_ns_strip(doc)
     blocks = xml2::xml_find_all(doc, "//TextBlock")
 
+    string = xml
+    if (root != "") {
+        string = stringr::str_replace(xml, root, "")
+    }
+    fields = strsplit(string, "/")[[1]]
+
     block_content = as.character(lapply(blocks, get_block_content))
-    fields = strsplit(xml, "/")[[1]]
     issue = tibble::tibble (
 			    lccn = fields[1],
 			    year = fields[2],
