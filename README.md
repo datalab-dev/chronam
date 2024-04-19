@@ -1,5 +1,24 @@
 # Chronam
 
+
+## Helpful Links
+
+- [Corpus Explorer Website][explorer_site]
+- [Corpus Explorer Repo][explorer_repo]
+- Chronicling America Project
+  - [Original Project Repo][strategy_repo]
+  - [Original Project Drive][strategy_drive]
+  - [chronam package repo][chronam]
+  - [Corpus Explorer Drive Folder][explorer_mudge]
+
+[explorer_site]: https://drive.google.com/drive/folders/1EvGTWzfqDqdLlnBRERb9Yo01FaMmOurm
+[explorer_repo]: https://github.com/datalab-dev/corpus_explorer
+[strategy_repo]: https://github.com/datalab-dev/stephanie_mudge_strategy
+[strategy_drive]: https://drive.google.com/drive/folders/1SAmJJ4sHw90bZ_XPNp8SV8YJGCLk6BNq
+[chronam]: https://github.com/datalab-dev/chronam
+[explorer_mudge]: https://drive.google.com/drive/folders/1EvGTWzfqDqdLlnBRERb9Yo01FaMmOurm
+
+
 # Install
 
 From package directory:
